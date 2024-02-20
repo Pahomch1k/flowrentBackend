@@ -64,7 +64,7 @@ public abstract class RepositoryBase<TEntity, TKey> : IRepository<TEntity, TKey>
     {
         if (entity is null)
         {
-            throw new ItemNotFoundException($"{typeof(TEntity).Name} with id {id} not found");
+            throw new NotFoundException($"{typeof(TEntity).Name} with id {id} not found");
         }
     }
 }

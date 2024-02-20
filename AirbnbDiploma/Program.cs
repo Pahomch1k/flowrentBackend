@@ -1,6 +1,13 @@
 using AirbnbDiploma.DAL;
 using AirbnbDiploma.Core.Extensions;
 using Microsoft.EntityFrameworkCore;
+using AirbnbDiploma.DAL.UnitOfWork;
+using AirbnbDiploma.BLL.Services.AuthService;
+using AirbnbDiploma.BLL.Services.TokenService;
+using AirbnbDiploma.Middlewares;
+using AirbnbDiploma.Extensions.Service;
+using AirbnbDiploma.Core.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace AirbnbDiploma;
 
@@ -16,10 +23,28 @@ public static class Program
         builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseMySql(connectionString, new MySqlServerVersion(version)));
 
+        // Services
+        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+        builder.Services.AddScoped<IAuthService, AuthService>();
+        builder.Services.AddScoped<ITokenService, TokenService>();
+
+        // Auth
+        builder.Services.AddIdentity<User, Role>()
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
+        builder.Services.Configure<IdentityOptions>(options =>
+        {
+            options.User.RequireUniqueEmail = false;
+        });
+        builder.Services.ConfigureAuth(builder.Configuration);
+
+        // Middlewares
+        builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
+
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.ConfigureSwagger();
 
         var app = builder.Build();
 
@@ -32,8 +57,10 @@ public static class Program
 
         app.UseHttpsRedirection();
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
+        app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
         app.MapControllers();
 
