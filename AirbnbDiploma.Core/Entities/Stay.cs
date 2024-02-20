@@ -33,7 +33,7 @@ public class Stay : IEntity<int>
 
     public byte ValueRating { get; set; }
 
-    public virtual ICollection<string> ImageUrls { get; set; }
+    public virtual ICollection<Image> ImageUrls { get; set; }
 
-    public virtual ICollection<string> Amenities { get; set; }
+    public virtual ICollection<Tag> Amenities { get; set; }
 }
