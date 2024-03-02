@@ -7,37 +7,66 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using AirbnbDiploma.Core.Extensions;
+using Google.Apis.Auth;
+using AirbnbDiploma.Core.Exceptions;
 
 namespace AirbnbDiploma.BLL.Services.TokenService;
 
 public class TokenService : ITokenService
 {
-    private readonly IConfiguration _configuration;
     private readonly UserManager<User> _userManager;
     private readonly RoleManager<Role> _roleManager;
+    private readonly JwtSettings _jwtInfo;
+    private readonly string _googleSecretId;
 
     public TokenService(IConfiguration configuration, UserManager<User> userManager, RoleManager<Role> roleManager)
     {
-        _configuration = configuration;
         _userManager = userManager;
         _roleManager = roleManager;
+
+        _googleSecretId = configuration.Get("Authentication:Google:ClientId");
+        _jwtInfo = new()
+        {
+            Secret = configuration.Get("Jwt:Secret"),
+            ValidIssuer = configuration.Get("Jwt:ValidIssuer"),
+            ValidAudience = configuration.Get("Jwt:ValidAudience"),
+            ExpiresInMinutes = Convert.ToDouble(configuration.Get("Jwt:ExpiresInMinutes")),
+        };
+
     }
 
     public async Task<string> GenerateJwtTokenAsync(User user)
     {
-        var secret = _configuration.Get("Jwt:Secret");
+        var secret = _jwtInfo.Secret;
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var expires = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration.Get("Jwt:ExpiresInMinutes")));
+        var expires = DateTime.UtcNow.AddMinutes(_jwtInfo.ExpiresInMinutes);
 
         var token = new JwtSecurityToken(
-            _configuration.Get("Jwt:ValidIssuer"),
-            _configuration.Get("Jwt:ValidAudience"),
+            _jwtInfo.ValidIssuer,
+            _jwtInfo.ValidAudience,
             await GetClaimsAsync(user),
             expires: expires,
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public async Task<GoogleJsonWebSignature.Payload> VerifyGoogleTokenAsync(string token)
+    {
+        try
+        {
+            var settings = new GoogleJsonWebSignature.ValidationSettings()
+            {
+                Audience = new List<string>() { _googleSecretId }
+            };
+            var payload = await GoogleJsonWebSignature.ValidateAsync(token, settings);
+            return payload;
+        }
+        catch (Exception ex)
+        {
+            throw new UnauthorizedException("Invalid Google token.", ex);
+        }
     }
 
     private async Task<ICollection<Claim>> GetClaimsAsync(User user)

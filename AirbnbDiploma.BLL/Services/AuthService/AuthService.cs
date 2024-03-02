@@ -18,19 +18,46 @@ public class AuthService : IAuthService
         _tokenService = tokenService;
     }
 
-    public async Task<string> LoginAsync(LoginInfoDto loginInfo)
+    public async Task<string> PerformInternalLoginAsync(InternalAuthDto internalAuth)
     {
-        var user = await PerformInternalLoginAsync(loginInfo.Login, loginInfo.Password);
+        var user = await _userManager.FindByNameAsync(internalAuth.Login);
 
-        return $"Bearer {await _tokenService.GenerateJwtTokenAsync(user)}";
+        return user != null && await _userManager.CheckPasswordAsync(user, internalAuth.Password)
+            ? await GenerateTokenFromUser(user)
+            : throw new UnauthorizedException(ExceptionsMessages.IncorrectLoginOrPassword);
     }
 
-    private async Task<User> PerformInternalLoginAsync(string userName, string password)
+    public async Task<string> PerformExternalLoginAsync(ExternalAuthDto externalAuth)
     {
-        var user = await _userManager.FindByNameAsync(userName);
+        var payload = await _tokenService.VerifyGoogleTokenAsync(externalAuth.IdToken);
 
-        return user != null && await _userManager.CheckPasswordAsync(user, password)
-            ? user
-            : throw new UnauthorizedException(ExceptionsMessages.IncorrectLoginOrPassword);
+        var info = new UserLoginInfo(externalAuth.Provider, payload.Subject, externalAuth.Provider);
+        var user = await GetOrCreateUserFromExternalProvider(externalAuth.Provider, payload.Email, info);
+
+        return await GenerateTokenFromUser(user);
+    }
+
+    private async Task<User> GetOrCreateUserFromExternalProvider(string provider, string userEmail, UserLoginInfo info)
+    {
+        var user = await _userManager.FindByLoginAsync(provider, info.ProviderKey);
+        if (user != null)
+        {
+            return user;
+        }
+
+        user = await _userManager.FindByEmailAsync(userEmail);
+        if (user == null)
+        {
+            user = new User { Email = userEmail, UserName = userEmail };
+            await _userManager.CreateAsync(user);
+        }
+
+        await _userManager.AddLoginAsync(user, info);
+        return user;
+    }
+
+    private async Task<string> GenerateTokenFromUser(User user)
+    {
+        return $"Bearer {await _tokenService.GenerateJwtTokenAsync(user)}";
     }
 }

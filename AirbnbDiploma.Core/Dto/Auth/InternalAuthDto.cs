@@ -1,6 +1,6 @@
 ﻿namespace AirbnbDiploma.Core.Dto.Auth;
 
-public class LoginInfoDto
+public class InternalAuthDto
 {
     public string Login { get; set; }
 
