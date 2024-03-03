@@ -15,13 +15,13 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("/login")]
-    public async Task<ActionResult<string>> InternalLoginAsync(InternalAuthDto internalAuth)
+    public async Task<ActionResult<AuthResponseDto>> InternalLoginAsync(InternalAuthDto internalAuth)
     {
         return Ok(await _authService.PerformInternalLoginAsync(internalAuth));
     }
 
     [HttpPost("/login/external")]
-    public async Task<ActionResult<string>> ExternalLoginAsync(ExternalAuthDto externalAuth)
+    public async Task<ActionResult<AuthResponseDto>> ExternalLoginAsync(ExternalAuthDto externalAuth)
     {
         return Ok(await _authService.PerformExternalLoginAsync(externalAuth));
     }

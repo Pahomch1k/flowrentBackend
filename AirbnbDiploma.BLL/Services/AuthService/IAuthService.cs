@@ -4,7 +4,7 @@ namespace AirbnbDiploma.BLL.Services.AuthService;
 
 public interface IAuthService
 {
-    Task<string> PerformInternalLoginAsync(InternalAuthDto internalAuth);
+    Task<AuthResponseDto> PerformInternalLoginAsync(InternalAuthDto internalAuth);
 
-    Task<string> PerformExternalLoginAsync(ExternalAuthDto externalAuth);
+    Task<AuthResponseDto> PerformExternalLoginAsync(ExternalAuthDto externalAuth);
 }

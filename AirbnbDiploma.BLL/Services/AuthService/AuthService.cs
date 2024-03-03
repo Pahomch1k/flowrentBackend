@@ -18,23 +18,29 @@ public class AuthService : IAuthService
         _tokenService = tokenService;
     }
 
-    public async Task<string> PerformInternalLoginAsync(InternalAuthDto internalAuth)
+    public async Task<AuthResponseDto> PerformInternalLoginAsync(InternalAuthDto internalAuth)
     {
         var user = await _userManager.FindByNameAsync(internalAuth.Login);
 
         return user != null && await _userManager.CheckPasswordAsync(user, internalAuth.Password)
-            ? await GenerateTokenFromUser(user)
+            ? new AuthResponseDto
+            {
+                Token = await GenerateTokenFromUser(user)
+            }
             : throw new UnauthorizedException(ExceptionsMessages.IncorrectLoginOrPassword);
     }
 
-    public async Task<string> PerformExternalLoginAsync(ExternalAuthDto externalAuth)
+    public async Task<AuthResponseDto> PerformExternalLoginAsync(ExternalAuthDto externalAuth)
     {
         var payload = await _tokenService.VerifyGoogleTokenAsync(externalAuth.IdToken);
 
         var info = new UserLoginInfo(externalAuth.Provider, payload.Subject, externalAuth.Provider);
         var user = await GetOrCreateUserFromExternalProvider(externalAuth.Provider, payload.Email, info);
 
-        return await GenerateTokenFromUser(user);
+        return new AuthResponseDto
+        {
+            Token = await GenerateTokenFromUser(user)
+        };
     }
 
     private async Task<User> GetOrCreateUserFromExternalProvider(string provider, string userEmail, UserLoginInfo info)
