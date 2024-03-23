@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AirbnbDiploma.Core.Enums;
+using Microsoft.AspNetCore.Identity;
 
 namespace AirbnbDiploma.Core.Entities;
 
@@ -11,4 +12,8 @@ public class User : IdentityUser<Guid>
     public string? GovernmentId { get; set; }
 
     public string? Address { get; set; }
+
+    public DateTime? DateOfBirth { get; set; }
+
+    public GenderType? Gender { get; set; }
 }

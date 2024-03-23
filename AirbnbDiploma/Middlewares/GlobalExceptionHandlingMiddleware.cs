@@ -22,6 +22,10 @@ public class GlobalExceptionHandlingMiddleware : IMiddleware
         {
             await ChangeResponseAsync(context.Response, HttpStatusCode.NotFound, ex.Message);
         }
+        catch (BadRequestException ex)
+        {
+            await ChangeResponseAsync(context.Response, HttpStatusCode.BadRequest, ex.Message);
+        }
         catch (UnauthorizedException ex)
         {
             await ChangeResponseAsync(context.Response, HttpStatusCode.Unauthorized, ex.Message);

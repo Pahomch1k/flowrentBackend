@@ -1,4 +1,5 @@
-﻿using AirbnbDiploma.BLL.Services.TokenService;
+﻿using System.Text;
+using AirbnbDiploma.BLL.Services.TokenService;
 using AirbnbDiploma.Core.Constants;
 using AirbnbDiploma.Core.Dto.Auth;
 using AirbnbDiploma.Core.Entities;
@@ -20,7 +21,7 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponseDto> PerformInternalLoginAsync(InternalAuthDto internalAuth)
     {
-        var user = await _userManager.FindByNameAsync(internalAuth.Login);
+        var user = await _userManager.FindByEmailAsync(internalAuth.Email);
 
         return user != null && await _userManager.CheckPasswordAsync(user, internalAuth.Password)
             ? new AuthResponseDto
@@ -36,6 +37,32 @@ public class AuthService : IAuthService
 
         var info = new UserLoginInfo(externalAuth.Provider, payload.Subject, externalAuth.Provider);
         var user = await GetOrCreateUserFromExternalProvider(externalAuth.Provider, payload.Email, info);
+
+        return new AuthResponseDto
+        {
+            Token = await GenerateTokenFromUser(user)
+        };
+    }
+
+    public async Task<AuthResponseDto> RegisterAsync(RegisterInfoDto registerInfo)
+    {
+        var user = new User
+        {
+            Email = registerInfo.Email,
+            UserName = registerInfo.Name,
+            DateOfBirth = registerInfo.DateOfBirth,
+            Gender = registerInfo.Gender,
+        };
+        var result = await _userManager.CreateAsync(user, registerInfo.Password);
+        if (!result.Succeeded)
+        {
+            StringBuilder errorMessage = new();
+            foreach (var error in result.Errors)
+            {
+                errorMessage.AppendLine(error.Description);
+            }
+            throw new BadRequestException(errorMessage.ToString());
+        }
 
         return new AuthResponseDto
         {
