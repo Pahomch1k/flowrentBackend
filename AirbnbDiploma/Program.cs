@@ -8,6 +8,7 @@ using AirbnbDiploma.Middlewares;
 using AirbnbDiploma.Extensions.Service;
 using AirbnbDiploma.Core.Entities;
 using Microsoft.AspNetCore.Identity;
+using AirbnbDiploma.BLL.Services.StaysService;
 
 namespace AirbnbDiploma;
 
@@ -38,6 +39,7 @@ public static class Program
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<ITokenService, TokenService>();
+        builder.Services.AddScoped<IStayService, StayService>();
 
         // Auth
         builder.Services.AddIdentity<User, Role>()

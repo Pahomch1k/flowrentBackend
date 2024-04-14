@@ -4,14 +4,19 @@ namespace AirbnbDiploma.Core.Entities;
 
 public class Stay : IEntity<int>
 {
-
     public int Id { get; set; }
 
     public string Title { get; set; }
 
     public string Description { get; set; }
 
+    public string CoverImageUrl { get; set; }
+
     public string Location { get; set; }
+
+    public DateTime StartDate { get; set; }
+
+    public DateTime EndDate { get; set; }
 
     public int MaxGuests { get; set; }
 
@@ -33,7 +38,7 @@ public class Stay : IEntity<int>
 
     public byte ValueRating { get; set; }
 
-    public virtual ICollection<Image> ImageUrls { get; set; }
+    public virtual ICollection<Image> ImageUrls { get; set; } = new List<Image>();
 
-    public virtual ICollection<Tag> Amenities { get; set; }
+    public virtual ICollection<Tag> Amenities { get; set; } = new List<Tag>();
 }

@@ -1,4 +1,5 @@
-﻿using AirbnbDiploma.Core.Dto.Stays;
+﻿using AirbnbDiploma.BLL.Services.StaysService;
+using AirbnbDiploma.Core.Dto.Stays;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AirbnbDiploma.Controllers;
@@ -7,24 +8,38 @@ namespace AirbnbDiploma.Controllers;
 [Route("api/[controller]")]
 public class StaysController : ControllerBase
 {
-    [HttpGet]
-    public ActionResult<StayBriefDto> GetStays()
+    private readonly IStayService _stayService;
+
+    public StaysController(IStayService stayService)
     {
-        var stays = new List<StayBriefDto>();
-        for (int i = 0; i < 20; i++)
-        {
-            stays.Add(new StayBriefDto
-            {
-                Id = 1,
-                ImageUrl = "https://static.leonardo-hotels.com/image/leonardohotelbucharestcitycenter_room_comfortdouble2_2022_4000x2600_7e18f254bc75491965d36cc312e8111f_1200x780_mobile_3.jpeg",
-                Name = "Grovland, California",
-                Place = "Yosemite National Park",
-                StartDate = new DateOnly(2024, 10, 23).ToDateTime(TimeOnly.MinValue),
-                EndDate = new DateOnly(2024, 10, 28).ToDateTime(TimeOnly.MinValue),
-                Rating = 4.91F,
-                Price = 289,
-            });
-        }
-        return Ok(stays);
+        _stayService = stayService;
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> AddStayAsync(NewStayDto stayDto)
+    {
+        await _stayService.AddStayAsync(stayDto);
+        return Created(ControllerContext.HttpContext.Request.Path, null);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<StayBriefDto>>> GetStaysAsync(int skip = 0, int count = int.MaxValue)
+    {
+        return Ok(await _stayService.GetStaysAsync(skip, count));
+    }
+
+    [HttpGet]
+    [Route("{id}")]
+    public async Task<ActionResult<StayDto>> GetStayAsync(int id)
+    {
+        return Ok(await _stayService.GetStayAsync(id));
+    }
+
+    [HttpDelete]
+    [Route("{id}")]
+    public async Task<ActionResult> RemoveStayAsync(int id)
+    {
+        await _stayService.RemoveStayByIdAsync(id);
+        return NoContent();
     }
 }

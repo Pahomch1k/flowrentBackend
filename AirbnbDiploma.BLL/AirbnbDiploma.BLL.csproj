@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AirbnbDiploma.Core\AirbnbDiploma.Core.csproj" />
+    <ProjectReference Include="..\AirbnbDiploma.DAL\AirbnbDiploma.DAL.csproj" />
   </ItemGroup>
 
 </Project>

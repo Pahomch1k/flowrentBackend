@@ -6,6 +6,8 @@ public class Review : IEntity<int>
 {
     public int Id { get; set; }
 
+    public int StayId { get; set; }
+
     public byte Rating { get; set; }
 
     public DateTime CreationDate { get; set; }
