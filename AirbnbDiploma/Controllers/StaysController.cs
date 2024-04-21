@@ -16,28 +16,28 @@ public class StaysController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> AddStayAsync(NewStayDto stayDto)
+    public async Task<ActionResult> AddAsync(NewStayDto stayDto)
     {
         await _stayService.AddStayAsync(stayDto);
         return Created(ControllerContext.HttpContext.Request.Path, null);
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<StayBriefDto>>> GetStaysAsync(int skip = 0, int count = int.MaxValue)
+    public async Task<ActionResult<IEnumerable<StayBriefDto>>> GetAsync(int skip = 0, int count = int.MaxValue)
     {
         return Ok(await _stayService.GetStaysAsync(skip, count));
     }
 
     [HttpGet]
     [Route("{id}")]
-    public async Task<ActionResult<StayDto>> GetStayAsync(int id)
+    public async Task<ActionResult<StayDto>> GetAsync(int id)
     {
         return Ok(await _stayService.GetStayAsync(id));
     }
 
     [HttpDelete]
     [Route("{id}")]
-    public async Task<ActionResult> RemoveStayAsync(int id)
+    public async Task<ActionResult> RemoveAsync(int id)
     {
         await _stayService.RemoveStayByIdAsync(id);
         return NoContent();

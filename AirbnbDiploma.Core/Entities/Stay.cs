@@ -38,7 +38,9 @@ public class Stay : IEntity<int>
 
     public byte ValueRating { get; set; }
 
-    public virtual ICollection<Image> ImageUrls { get; set; } = new List<Image>();
+    public ICollection<Image> ImageUrls { get; set; } = new List<Image>();
 
-    public virtual ICollection<Tag> Amenities { get; set; } = new List<Tag>();
+    public ICollection<Tag> Amenities { get; set; } = new List<Tag>();
+
+    public ICollection<Review> Reviews { get; set; } = new List<Review>();
 }
