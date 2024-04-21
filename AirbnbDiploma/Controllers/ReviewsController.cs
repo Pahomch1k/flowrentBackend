@@ -1,5 +1,7 @@
 ﻿using AirbnbDiploma.BLL.Services.ReviewsService;
 using AirbnbDiploma.Core.Dto.Reviews;
+using AirbnbDiploma.Core.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AirbnbDiploma.Controllers;
@@ -16,6 +18,7 @@ public class ReviewsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = Roles.User)]
     public async Task<ActionResult> AddAsync(NewReviewDto stayDto)
     {
         await _reviewsService.AddReviewByStayId(stayDto);
@@ -31,6 +34,7 @@ public class ReviewsController : ControllerBase
 
     [HttpDelete]
     [Route("{id}")]
+    [Authorize(Roles = Roles.User)]
     public async Task<ActionResult> RemoveAsync(int id)
     {
         await _reviewsService.RemoveReviewById(id);

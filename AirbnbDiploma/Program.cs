@@ -10,6 +10,7 @@ using AirbnbDiploma.Core.Entities;
 using Microsoft.AspNetCore.Identity;
 using AirbnbDiploma.BLL.Services.StaysService;
 using AirbnbDiploma.BLL.Services.ReviewsService;
+using AirbnbDiploma.BLL.Services.UserService;
 
 namespace AirbnbDiploma;
 
@@ -42,11 +43,13 @@ public static class Program
         builder.Services.AddScoped<ITokenService, TokenService>();
         builder.Services.AddScoped<IStayService, StayService>();
         builder.Services.AddScoped<IReviewsService, ReviewsService>();
+        builder.Services.AddScoped<IUserService, UserService>();
 
         // Auth
         builder.Services.AddIdentity<User, Role>()
             .AddEntityFrameworkStores<AppDbContext>()
-            .AddDefaultTokenProviders();
+            .AddDefaultTokenProviders()
+            .AddRoles<Role>();
         builder.Services.Configure<IdentityOptions>(options =>
         {
             options.User.RequireUniqueEmail = false;

@@ -1,5 +1,7 @@
 ﻿using AirbnbDiploma.BLL.Services.StaysService;
 using AirbnbDiploma.Core.Dto.Stays;
+using AirbnbDiploma.Core.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AirbnbDiploma.Controllers;
@@ -16,6 +18,7 @@ public class StaysController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = Roles.User)]
     public async Task<ActionResult> AddAsync(NewStayDto stayDto)
     {
         await _stayService.AddStayAsync(stayDto);
@@ -37,6 +40,7 @@ public class StaysController : ControllerBase
 
     [HttpDelete]
     [Route("{id}")]
+    [Authorize(Roles = Roles.User)]
     public async Task<ActionResult> RemoveAsync(int id)
     {
         await _stayService.RemoveStayByIdAsync(id);

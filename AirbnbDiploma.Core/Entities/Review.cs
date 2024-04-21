@@ -6,6 +6,8 @@ public class Review : IEntity<int>
 {
     public int Id { get; set; }
 
+    public Guid AuthorId { get; set; }
+
     public int StayId { get; set; }
 
     public byte Rating { get; set; }

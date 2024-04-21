@@ -1,4 +1,5 @@
-﻿using AirbnbDiploma.Core.Dto.Stays;
+﻿using AirbnbDiploma.BLL.Services.UserService;
+using AirbnbDiploma.Core.Dto.Stays;
 using AirbnbDiploma.Core.Entities;
 using AirbnbDiploma.DAL.UnitOfWork;
 
@@ -7,10 +8,12 @@ namespace AirbnbDiploma.BLL.Services.StaysService;
 public class StayService : IStayService
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IUserService _userService;
 
-    public StayService(IUnitOfWork unitOfWork)
+    public StayService(IUnitOfWork unitOfWork, IUserService userService)
     {
         _unitOfWork = unitOfWork;
+        _userService = userService;
     }
 
     public async Task AddStayAsync(NewStayDto stayDto)
@@ -91,6 +94,8 @@ public class StayService : IStayService
 
     public async Task RemoveStayByIdAsync(int id)
     {
+        var stay = await _unitOfWork.StaysRepository.GetByIdAsync(id);
+        _userService.ValidateUserId(stay.OwnerId);
         await _unitOfWork.StaysRepository.DeleteAsync(id);
         await _unitOfWork.CommitAsync();
     }

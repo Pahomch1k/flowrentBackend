@@ -1,4 +1,5 @@
-﻿using AirbnbDiploma.Core.Dto.Reviews;
+﻿using AirbnbDiploma.BLL.Services.UserService;
+using AirbnbDiploma.Core.Dto.Reviews;
 using AirbnbDiploma.Core.Entities;
 using AirbnbDiploma.DAL.UnitOfWork;
 
@@ -7,10 +8,12 @@ namespace AirbnbDiploma.BLL.Services.ReviewsService;
 public class ReviewsService : IReviewsService
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IUserService _userService;
 
-    public ReviewsService(IUnitOfWork unitOfWork)
+    public ReviewsService(IUnitOfWork unitOfWork, IUserService userService)
     {
         _unitOfWork = unitOfWork;
+        _userService = userService;
     }
 
     public async Task AddReviewByStayId(NewReviewDto reviewDto)
@@ -41,6 +44,8 @@ public class ReviewsService : IReviewsService
 
     public async Task RemoveReviewById(int id)
     {
+        var review = await _unitOfWork.ReviewRepository.GetByIdAsync(id);
+        _userService.ValidateUserId(review.AuthorId);
         await _unitOfWork.ReviewRepository.DeleteAsync(id);
         await _unitOfWork.CommitAsync();
     }
