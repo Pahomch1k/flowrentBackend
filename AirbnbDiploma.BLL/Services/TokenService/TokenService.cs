@@ -73,6 +73,7 @@ public class TokenService : ITokenService
     {
         var claims = new HashSet<Claim>
         {
+            new CustomClaim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new CustomClaim(ClaimTypes.Name, user.UserName),
         };
         var roleNames = await _userManager.GetRolesAsync(user);

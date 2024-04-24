@@ -19,11 +19,11 @@ public class UserService : IUserService
         var userIdClaim = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (!Guid.TryParse(userIdClaim, out Guid currentUserId))
         {
-            throw new ForbiddenException();
+            throw new ForbiddenException("");
         }
         if (currentUserId != userId && !_httpContextAccessor.HttpContext.User.IsInRole(Roles.Admin))
         {
-            throw new ForbiddenException();
+            throw new ForbiddenException("");
         }
     }
 }

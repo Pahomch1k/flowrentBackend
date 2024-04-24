@@ -30,6 +30,10 @@ public class GlobalExceptionHandlingMiddleware : IMiddleware
         {
             await ChangeResponseAsync(context.Response, HttpStatusCode.Unauthorized, ex.Message);
         }
+        catch (ForbiddenException ex)
+        {
+            await ChangeResponseAsync(context.Response, HttpStatusCode.Forbidden, ex.Message);
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Unknown error occured.");
