@@ -9,4 +9,6 @@ public interface IAuthService
     Task<AuthResponseDto> PerformExternalLoginAsync(ExternalAuthDto externalAuth);
 
     Task<AuthResponseDto> RegisterAsync(RegisterInfoDto registerInfo);
+
+    Task ConfirmEmail(EmailConfirmationDto emailConfirmation);
 }
