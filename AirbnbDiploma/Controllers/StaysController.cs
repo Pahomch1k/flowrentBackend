@@ -1,6 +1,7 @@
 ﻿using AirbnbDiploma.BLL.Services.StaysService;
 using AirbnbDiploma.Core.Dto.Stays;
 using AirbnbDiploma.Core.Enums;
+using AirbnbDiploma.Core.FilteringInfo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,9 +27,9 @@ public class StaysController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<StayBriefDto>>> GetAsync(int skip = 0, int count = int.MaxValue)
+    public async Task<ActionResult<IEnumerable<StayBriefDto>>> GetAsync([FromQuery] StayFilteringInfo filteringInfo)
     {
-        return Ok(await _stayService.GetStaysAsync(skip, count));
+        return Ok(await _stayService.GetStaysAsync(filteringInfo));
     }
 
     [HttpGet]

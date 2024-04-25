@@ -1,6 +1,8 @@
 ﻿using AirbnbDiploma.Core.Entities;
 using AirbnbDiploma.Core.FilteringInfo;
+using AirbnbDiploma.DAL.Filters;
 using AirbnbDiploma.DAL.Repositories.Base;
+using Microsoft.EntityFrameworkCore;
 
 namespace AirbnbDiploma.DAL.Repositories.StaysRepository;
 
@@ -10,8 +12,9 @@ public class StaysRepository : RepositoryBase<Stay, int>, IStaysRepository
     {
     }
 
-    public Task<IEnumerable<Stay>> GetAllFilteredAsync(StayFilteringInfo filter)
+    public async Task<IEnumerable<Stay>> GetAllFilteredAsync(StayFilteringInfo filter)
     {
-        throw new NotImplementedException();
+        var stayFilter = new StayFilter(MainCollection.AsQueryable());
+        return await stayFilter.ApplyFilters(filter).ToListAsync();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AirbnbDiploma.BLL.Services.UserService;
 using AirbnbDiploma.Core.Dto.Stays;
 using AirbnbDiploma.Core.Entities;
+using AirbnbDiploma.Core.FilteringInfo;
 using AirbnbDiploma.DAL.UnitOfWork;
 
 namespace AirbnbDiploma.BLL.Services.StaysService;
@@ -76,9 +77,9 @@ public class StayService : IStayService
         };
     }
 
-    public async Task<IEnumerable<StayBriefDto>> GetStaysAsync(int skip, int count)
+    public async Task<IEnumerable<StayBriefDto>> GetStaysAsync(StayFilteringInfo filteringInfo)
     {
-        var stays = await _unitOfWork.StaysRepository.GetAllAsync(skip, count);
+        var stays = await _unitOfWork.StaysRepository.GetAllFilteredAsync(filteringInfo);
         return stays.Select((stay) => new StayBriefDto
         {
             Id = stay.Id,

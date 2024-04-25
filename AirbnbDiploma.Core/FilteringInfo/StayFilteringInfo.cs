@@ -28,13 +28,13 @@ public class StayFilteringInfo
 
     public short MinBathrooms { get; set; }
 
-    public bool TopTierStays { get; set; }
+    public bool? TopTierStays { get; set; }
 
-    public bool InstantBook { get; set; }
+    public bool? InstantBook { get; set; }
 
-    public bool SelfCheckIn { get; set; }
+    public bool? SelfCheckIn { get; set; }
 
-    public bool AllowsPets { get; set; }
+    public bool? AllowsPets { get; set; }
 
     public IEnumerable<PropertyType>? PropertyTypes { get; set; }
 
