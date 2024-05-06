@@ -4,9 +4,9 @@ namespace AirbnbDiploma.Core.FilteringInfo;
 
 public class StayFilteringInfo
 {
-    public int Skip { get; set; }
+    public int Page { get; set; }
 
-    public int Count { get; set; }
+    public int Count { get; set; } = 10;
 
     public PlaceType? PlaceType { get; set; }
 

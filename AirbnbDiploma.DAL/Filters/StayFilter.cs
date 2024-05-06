@@ -14,7 +14,6 @@ internal class StayFilter
     public IQueryable<Stay> ApplyFilters(StayFilteringInfo filteringInfo)
     {
         ApplyPlaceTypeFilters(filteringInfo);
-        ApplyPaginationFilters(filteringInfo);
         ApplyRegionFilters(filteringInfo);
         ApplyDateFilters(filteringInfo);
         ApplyGuestFilters(filteringInfo);
@@ -25,14 +24,15 @@ internal class StayFilter
         ApplyInstantBookFilters(filteringInfo);
         ApplySelfCheckInFilters(filteringInfo);
         ApplyPropertyTypeFilters(filteringInfo);
+        ApplyPaginationFilters(filteringInfo);
         return _queryable;
     }
 
     private void ApplyPaginationFilters(StayFilteringInfo filteringInfo)
     {
-        if (filteringInfo.Skip > 0)
+        if (filteringInfo.Page > 0)
         {
-            _queryable = _queryable.Skip(filteringInfo.Count * (filteringInfo.Skip - 1));
+            _queryable = _queryable.Skip(filteringInfo.Count * (filteringInfo.Page - 1));
         }
         _queryable = _queryable.Take(filteringInfo.Count);
     }

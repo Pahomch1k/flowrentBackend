@@ -32,11 +32,4 @@ public class AuthController : ControllerBase
     {
         return Ok(await _authService.RegisterAsync(registerInfo));
     }
-
-    [HttpPost("confirmEmail")]
-    public async Task<ActionResult> ConfirmEmailAsync(EmailConfirmationDto emailConfirmation)
-    {
-        await _authService.ConfirmEmail(emailConfirmation);
-        return Ok();
-    }
 }
