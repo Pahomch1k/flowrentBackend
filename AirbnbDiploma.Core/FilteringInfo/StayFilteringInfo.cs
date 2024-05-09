@@ -8,7 +8,9 @@ public class StayFilteringInfo
 
     public int Count { get; set; } = 10;
 
-    public PlaceType? PlaceType { get; set; }
+    public string? Location { get; set; }
+
+    public PlaceType PlaceType { get; set; }
 
     public int? RegionId { get; set; }
 

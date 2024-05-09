@@ -1,4 +1,5 @@
 ﻿using AirbnbDiploma.Core.Entities;
+using AirbnbDiploma.Core.Enums;
 using AirbnbDiploma.Core.FilteringInfo;
 
 namespace AirbnbDiploma.DAL.Filters;
@@ -24,6 +25,7 @@ internal class StayFilter
         ApplyInstantBookFilters(filteringInfo);
         ApplySelfCheckInFilters(filteringInfo);
         ApplyPropertyTypeFilters(filteringInfo);
+        ApplyLocationFilters(filteringInfo);
         ApplyPaginationFilters(filteringInfo);
         return _queryable;
     }
@@ -39,7 +41,7 @@ internal class StayFilter
 
     private void ApplyPlaceTypeFilters(StayFilteringInfo filteringInfo)
     {
-        if (filteringInfo.PlaceType is not null)
+        if (filteringInfo.PlaceType != PlaceType.Any)
         {
             _queryable = _queryable.Where(stay => stay.PlaceType == filteringInfo.PlaceType);
         }
@@ -112,6 +114,14 @@ internal class StayFilter
         if (filteringInfo.PropertyTypes is not null)
         {
             _queryable = _queryable.Where(g => filteringInfo.PropertyTypes.Contains(g.PropertyType));
+        }
+    }
+
+    private void ApplyLocationFilters(StayFilteringInfo filteringInfo)
+    {
+        if (filteringInfo.Location is not null)
+        {
+            _queryable = _queryable.Where(stay => stay.Location.Contains(filteringInfo.Location));
         }
     }
 }

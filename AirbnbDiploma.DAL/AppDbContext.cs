@@ -22,6 +22,10 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>
 
     public DbSet<TagType> TagTypes { get; set; }
 
+    public DbSet<WhishlistCategory> WhishlistCategories { get; set; }
+
+    public DbSet<WhishlistItem> WhishlistItems { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
