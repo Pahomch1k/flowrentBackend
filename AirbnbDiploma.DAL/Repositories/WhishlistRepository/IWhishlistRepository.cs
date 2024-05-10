@@ -10,7 +10,7 @@ public interface IWhishlistRepository
 
     Task<IEnumerable<WhishlistItem>> GetItemsAsync(int categoryId);
 
-    Task<IEnumerable<WhishlistCategory>> GetCategoriesAsync(int userId);
+    Task<IEnumerable<WhishlistCategory>> GetCategoriesAsync(Guid userId);
 
     Task RemoveCategoryByIdAsync(int id);
 

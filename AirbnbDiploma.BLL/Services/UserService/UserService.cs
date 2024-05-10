@@ -37,9 +37,8 @@ public class UserService : IUserService
 
     public async Task SendEmailConfirmationAsync()
     {
-        var id = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier)
-            ?? throw new UnauthorizedException("");
-        var user = await _userManager.FindByIdAsync(id);
+        var id = GetUserId();
+        var user = await _userManager.FindByIdAsync(id.ToString());
         await SendEmailConfirmationAsync(user);
     }
 
@@ -67,5 +66,27 @@ public class UserService : IUserService
             throw new BadRequestException("Invalid email token");
         }
         await _userManager.AddToRoleAsync(user, Roles.User);
+    }
+
+    public Guid GetUserId()
+    {
+        return Guid.TryParse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid id)
+            ? id
+            : throw new UnauthorizedException("");
+    }
+
+    public async Task<User> GetUserAsync()
+    {
+        return await _userManager.FindByIdAsync(GetUserId().ToString())
+            ?? throw new UnauthorizedException("Invalid email token");
+    }
+
+    public async Task ValidateUserRoleAsync(string roleName)
+    {
+        var isInRole = await _userManager.IsInRoleAsync(await GetUserAsync(), roleName.ToString());
+        if (!isInRole)
+        {
+            throw new UnauthorizedException("Insufficient role");
+        }
     }
 }

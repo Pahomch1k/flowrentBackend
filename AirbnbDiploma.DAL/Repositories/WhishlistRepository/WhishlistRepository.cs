@@ -3,11 +3,12 @@ using AirbnbDiploma.Core.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace AirbnbDiploma.DAL.Repositories.WhishlistRepository;
-internal class WhishlistRepository : IWhishlistRepository
+
+public class WhishlistRepository : IWhishlistRepository
 {
     private readonly AppDbContext _context;
 
-    protected WhishlistRepository(AppDbContext context)
+    public WhishlistRepository(AppDbContext context)
     {
         _context = context;
     }
@@ -27,7 +28,7 @@ internal class WhishlistRepository : IWhishlistRepository
         return await _context.WhishlistItems.Where(item => item.CategoryId == categoryId).ToListAsync();
     }
 
-    public async Task<IEnumerable<WhishlistCategory>> GetCategoriesAsync(int userId)
+    public async Task<IEnumerable<WhishlistCategory>> GetCategoriesAsync(Guid userId)
     {
         return await _context.WhishlistCategories.Where(item => item.UserId == userId).ToListAsync();
     }
@@ -48,7 +49,7 @@ internal class WhishlistRepository : IWhishlistRepository
         _context.WhishlistItems.Remove(item!);
     }
 
-    protected virtual void ThrowIfNull(int id, object? entity)
+    private static void ThrowIfNull(int id, object? entity)
     {
         if (entity is null)
         {

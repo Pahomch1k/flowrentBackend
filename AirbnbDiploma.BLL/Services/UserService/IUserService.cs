@@ -5,6 +5,12 @@ namespace AirbnbDiploma.BLL.Services.UserService;
 
 public interface IUserService
 {
+    Guid GetUserId();
+
+    Task<User> GetUserAsync();
+
+    Task ValidateUserRoleAsync(string roleName);
+
     void ValidateUserId(Guid userId);
 
     Task SendEmailConfirmationAsync();

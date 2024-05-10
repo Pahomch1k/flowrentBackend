@@ -2,6 +2,7 @@
 using AirbnbDiploma.DAL.Repositories.ReviewRepository;
 using AirbnbDiploma.DAL.Repositories.StaysRepository;
 using AirbnbDiploma.DAL.Repositories.TagRepository;
+using AirbnbDiploma.DAL.Repositories.WhishlistRepository;
 using Microsoft.EntityFrameworkCore;
 
 namespace AirbnbDiploma.DAL.UnitOfWork;
@@ -17,12 +18,14 @@ public class UnitOfWork : IUnitOfWork
         ReviewRepository = new ReviewRepository(dbContext);
         StaysRepository = new StaysRepository(dbContext);
         TagRepository = new TagRepository(dbContext);
+        WhishlistRepository = new WhishlistRepository(dbContext);
     }
 
     public IBookingRepository BookingRepository { get; set; }
     public IReviewRepository ReviewRepository { get; set; }
     public IStaysRepository StaysRepository { get; set; }
     public ITagRepository TagRepository { get; set; }
+    public IWhishlistRepository WhishlistRepository { get; set; }
 
     public async Task CommitAsync()
     {

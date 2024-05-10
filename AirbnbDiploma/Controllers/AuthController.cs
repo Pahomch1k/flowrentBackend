@@ -18,13 +18,29 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<AuthResponseDto>> InternalLoginAsync(InternalAuthDto internalAuth)
     {
-        return Ok(await _authService.PerformInternalLoginAsync(internalAuth));
+        var result = await _authService.PerformInternalLoginAsync(internalAuth);
+        var cookieOptions = new CookieOptions
+        {
+            Secure = true,
+            HttpOnly = true,
+            SameSite = SameSiteMode.None
+        };
+        Response.Cookies.Append("Authorization", result.Token, cookieOptions);
+        return Ok(result);
     }
 
     [HttpPost("login/external")]
     public async Task<ActionResult<AuthResponseDto>> ExternalLoginAsync(ExternalAuthDto externalAuth)
     {
-        return Ok(await _authService.PerformExternalLoginAsync(externalAuth));
+        var result = await _authService.PerformExternalLoginAsync(externalAuth);
+        var cookieOptions = new CookieOptions
+        {
+            Secure = true,
+            HttpOnly = true,
+            SameSite = SameSiteMode.None
+        };
+        Response.Cookies.Append("Authorization", result.Token, cookieOptions);
+        return Ok(result);
     }
 
     [HttpPost("register")]
