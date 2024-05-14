@@ -1,6 +1,8 @@
 ﻿using System.Security.Claims;
 using AirbnbDiploma.BLL.Services.EmailService;
+using AirbnbDiploma.Core.Constants;
 using AirbnbDiploma.Core.Dto.Auth;
+using AirbnbDiploma.Core.EmalTemplates.Arguments;
 using AirbnbDiploma.Core.Entities;
 using AirbnbDiploma.Core.Enums;
 using AirbnbDiploma.Core.Exceptions;
@@ -50,8 +52,11 @@ public class UserService : IUserService
         }
         var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
         var tokenBase64 = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(token));
-        var link = $"{_httpContextAccessor.HttpContext.Request.Host}/api/user/confirmEmail?id={user.Id}&token={tokenBase64}";
-        await _emailService.SendAsync(user.Email, "Email confirmation", link);
+        var emalArguments = new EmailConfirmationArguments
+        {
+            Link = $"https://{_httpContextAccessor.HttpContext.Request.Host}/api/user/confirmEmail?id={user.Id}&token={tokenBase64}"
+        };
+        await _emailService.SendAsync(user.Email, "Email confirmation", HtmlTemplateNames.EmailConfimation, emalArguments);
     }
 
     public async Task ConfirmEmail(EmailConfirmationDto emailConfirmation)
