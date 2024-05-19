@@ -24,6 +24,22 @@ public class UserController : ControllerBase
         return Ok();
     }
 
+    [Authorize]
+    [HttpPost("changeEmail")]
+    public async Task<ActionResult> ChangeEmail(EmailChangeRequestDto changeRequest)
+    {
+        await _userService.SendEmailChangeRequestAsync(changeRequest.NewEmail);
+        return Ok();
+    }
+
+    [HttpGet("confirmEmailChange")]
+    public async Task<ActionResult> ConfirmEmailChange([FromQuery] EmailChangeConfirmationDto emailChangeConfirmation)
+    {
+        await _userService.ConfirmEmailChangeAsync(emailChangeConfirmation);
+        return Ok();
+    }
+
+
     [HttpGet("confirmEmail")]
     public async Task<ActionResult> ConfirmEmailAsync([FromQuery] EmailConfirmationDto emailConfirmation)
     {

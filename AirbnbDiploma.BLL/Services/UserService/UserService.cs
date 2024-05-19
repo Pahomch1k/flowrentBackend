@@ -2,6 +2,7 @@
 using AirbnbDiploma.BLL.Services.EmailService;
 using AirbnbDiploma.Core.Constants;
 using AirbnbDiploma.Core.Dto.Auth;
+using AirbnbDiploma.Core.EmailTemplates.Arguments;
 using AirbnbDiploma.Core.EmalTemplates.Arguments;
 using AirbnbDiploma.Core.Entities;
 using AirbnbDiploma.Core.Enums;
@@ -34,6 +35,39 @@ public class UserService : IUserService
         if (currentUserId != userId && !_httpContextAccessor.HttpContext.User.IsInRole(Roles.Admin))
         {
             throw new ForbiddenException("");
+        }
+    }
+
+    public async Task SendEmailChangeRequestAsync(string newEmail)
+    {
+        var id = GetUserId();
+        var user = await _userManager.FindByIdAsync(id.ToString());
+        var token = await _userManager.GenerateChangeEmailTokenAsync(user, newEmail);
+        var tokenBase64 = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(token));
+        var newEmailBase64 = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(newEmail));
+        var emalArguments = new EmailChangeArguments
+        {
+            Link = $"https://{_httpContextAccessor.HttpContext.Request.Host}/api/user/confirmEmailChange?id={user.Id}&newEmail={newEmailBase64}&token={tokenBase64}",
+            NewEmail = newEmail,
+        };
+        await _emailService.SendAsync(user.Email, "Email change", HtmlTemplateNames.EmailChange, emalArguments);
+    }
+
+    public async Task ConfirmEmailChangeAsync(EmailChangeConfirmationDto emailConfirmation)
+    {
+        var user = await _userManager.FindByIdAsync(emailConfirmation.Id.ToString())
+            ?? throw new UnauthorizedException("Invalid email token");
+
+        var base64EncodedBytes = Convert.FromBase64String(emailConfirmation.Token);
+        var token = System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+
+        base64EncodedBytes = Convert.FromBase64String(emailConfirmation.NewEmail);
+        var newEmail = System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+
+        var result = await _userManager.ChangeEmailAsync(user, newEmail, token);
+        if (!result.Succeeded)
+        {
+            throw new BadRequestException("Invalid email token");
         }
     }
 

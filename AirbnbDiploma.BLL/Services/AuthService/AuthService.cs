@@ -67,7 +67,15 @@ public class AuthService : IAuthService
             throw new BadRequestException(errorMessage.ToString());
         }
 
-        await _userService.SendEmailConfirmationAsync(user);
+        try
+        {
+            await _userService.SendEmailConfirmationAsync(user);
+        }
+        catch
+        {
+            await _userManager.DeleteAsync(user);
+            throw;
+        }
 
         return new AuthResponseDto
         {

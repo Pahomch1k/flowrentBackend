@@ -18,4 +18,8 @@ public interface IUserService
     Task SendEmailConfirmationAsync(User user);
 
     Task ConfirmEmail(EmailConfirmationDto emailConfirmation);
+
+    Task SendEmailChangeRequestAsync(string newEmail);
+
+    Task ConfirmEmailChangeAsync(EmailChangeConfirmationDto emailConfirmation);
 }
