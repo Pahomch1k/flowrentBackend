@@ -4,15 +4,15 @@ public class RatingDto
 {
     public float Overall { get; set; }
 
-    public byte Cleanliness { get; set; }
+    public float Cleanliness { get; set; }
 
-    public byte Accuracy { get; set; }
+    public float Accuracy { get; set; }
 
-    public byte CheckIn { get; set; }
+    public float CheckIn { get; set; }
 
-    public byte Communication { get; set; }
+    public float Communication { get; set; }
 
-    public byte Location { get; set; }
+    public float Location { get; set; }
 
-    public byte Value { get; set; }
+    public float Value { get; set; }
 }

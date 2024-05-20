@@ -13,6 +13,7 @@ using AirbnbDiploma.BLL.Services.ReviewsService;
 using AirbnbDiploma.BLL.Services.UserService;
 using AirbnbDiploma.BLL.Services.EmailService;
 using AirbnbDiploma.BLL.Services.WhishlistService;
+using AirbnbDiploma.BLL.Services.BookingService;
 
 namespace AirbnbDiploma;
 
@@ -49,6 +50,7 @@ public static class Program
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IEmailService, EmailService>();
         builder.Services.AddScoped<IWhishlistService, WhishlistService>();
+        builder.Services.AddScoped<IBookingService, BookingService>();
 
         // Auth
         builder.Services.AddIdentity<User, Role>()

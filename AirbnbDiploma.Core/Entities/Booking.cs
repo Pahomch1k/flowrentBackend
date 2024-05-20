@@ -7,7 +7,7 @@ public class Booking : IEntity<int>
 {
     public int Id { get; set; }
 
-    public int UserId { get; set; }
+    public Guid UserId { get; set; }
 
     public int StayId { get; set; }
 

@@ -52,6 +52,9 @@ public class StayService : IStayService
             Description = stay.Description,
             Location = stay.Location,
             MaxGuests = stay.MaxGuests,
+            Beds = stay.Beds,
+            Bedrooms = stay.Bedrooms,
+            Bathrooms = stay.Bathrooms,
             Price = stay.Price,
             CleaningFee = stay.CleaningFee,
             Rating = new RatingDto

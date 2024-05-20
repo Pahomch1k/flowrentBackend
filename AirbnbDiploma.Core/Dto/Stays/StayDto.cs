@@ -12,6 +12,12 @@ public class StayDto
 
     public int MaxGuests { get; set; }
 
+    public int Beds { get; set; }
+
+    public int Bedrooms { get; set; }
+
+    public int Bathrooms { get; set; }
+
     public int Price { get; set; }
 
     public int CleaningFee { get; set; }

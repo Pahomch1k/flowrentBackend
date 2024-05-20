@@ -2,4 +2,5 @@
 
 public enum BookingStatus
 {
+    AwaitingPayment,
 }
