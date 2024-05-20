@@ -9,6 +9,8 @@ public class User : IdentityUser<Guid>
 
     public string? LastName { get; set; }
 
+    public string? ImageUrl { get; set; }
+
     public string? GovernmentId { get; set; }
 
     public string? Address { get; set; }
