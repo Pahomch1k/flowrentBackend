@@ -366,3 +366,4 @@ FodyWeavers.xsd
 /wwwroot/img
 /AirbnbDiploma.DAL/Migrations
 /images
+/.env
