@@ -30,5 +30,13 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>
     {
         base.OnModelCreating(builder);
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        foreach (var entity in builder.Model.GetEntityTypes())
+        {
+            if (entity?.GetTableName() != null)
+            {
+                entity.SetTableName(entity.GetTableName()?.ToLower());
+            }
+        }
     }
 }

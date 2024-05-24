@@ -96,6 +96,7 @@ public class AuthService : IAuthService
         {
             user = new User { Email = userEmail, UserName = userEmail };
             await _userManager.CreateAsync(user);
+            await _userService.SendEmailConfirmationAsync(user);
         }
 
         await _userManager.AddLoginAsync(user, info);
