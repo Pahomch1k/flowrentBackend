@@ -1,4 +1,4 @@
-﻿namespace AirbnbDiploma.Core.EmalTemplates.Arguments;
+﻿namespace AirbnbDiploma.Core.EmailTemplates.Arguments;
 
 public class EmailConfirmationArguments
 {

@@ -3,7 +3,6 @@ using AirbnbDiploma.BLL.Services.EmailService;
 using AirbnbDiploma.Core.Constants;
 using AirbnbDiploma.Core.Dto.Auth;
 using AirbnbDiploma.Core.EmailTemplates.Arguments;
-using AirbnbDiploma.Core.EmalTemplates.Arguments;
 using AirbnbDiploma.Core.Entities;
 using AirbnbDiploma.Core.Enums;
 using AirbnbDiploma.Core.Exceptions;

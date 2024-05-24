@@ -1,0 +1,12 @@
+services:
+  db:
+    build: ./Docker
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+  web:
+    build: .
+    ports:
+      - "5098:80"
+    env_file:
+      - path: ./.env
