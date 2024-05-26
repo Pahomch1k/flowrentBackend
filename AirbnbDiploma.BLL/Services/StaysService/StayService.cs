@@ -1,5 +1,6 @@
 ﻿using AirbnbDiploma.BLL.Services.UserService;
 using AirbnbDiploma.Core.Dto.Stays;
+using AirbnbDiploma.Core.Dto.Users;
 using AirbnbDiploma.Core.Entities;
 using AirbnbDiploma.Core.FilteringInfo;
 using AirbnbDiploma.DAL.UnitOfWork;
@@ -66,6 +67,16 @@ public class StayService : IStayService
                 Location = stay.LocationRating,
                 Value = stay.ValueRating,
                 Overall = stay.OverallRating,
+            },
+            Owner = new UserInfoDto
+            {
+                Id = stay.Owner.Id,
+                UserName = stay.Owner.UserName,
+                Email = stay.Owner.Email,
+                ImageUrl = stay.Owner.ImageUrl,
+                Gender = stay.Owner.Gender,
+                DateOfBirth = stay.Owner.DateOfBirth,
+                YearsOfHosting = (int)((DateTime.UtcNow - stay.Owner.RegisteredAt).TotalDays / 365.2425)
             },
             ImageUrls = stay.ImageUrls.Select((image) => image.Url),
             Amenities = stay.Amenities.GroupBy((amenity) => amenity.TagTypeId).Select((amenityGroup) => new TagTypeDto

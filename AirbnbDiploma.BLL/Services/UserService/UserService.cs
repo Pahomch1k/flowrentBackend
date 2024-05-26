@@ -2,6 +2,7 @@
 using AirbnbDiploma.BLL.Services.EmailService;
 using AirbnbDiploma.Core.Constants;
 using AirbnbDiploma.Core.Dto.Auth;
+using AirbnbDiploma.Core.Dto.Users;
 using AirbnbDiploma.Core.EmailTemplates.Arguments;
 using AirbnbDiploma.Core.Entities;
 using AirbnbDiploma.Core.Enums;
@@ -113,10 +114,19 @@ public class UserService : IUserService
             : throw new UnauthorizedException("");
     }
 
-    public async Task<User> GetUserAsync()
+    public async Task<UserInfoDto> GetUserInfoAsync()
     {
-        return await _userManager.FindByIdAsync(GetUserId().ToString())
-            ?? throw new UnauthorizedException("Invalid email token");
+        var user = await GetUserAsync();
+
+        return new UserInfoDto
+        {
+            Id = user.Id,
+            UserName = user.UserName,
+            DateOfBirth = user.DateOfBirth,
+            Email = user.Email,
+            Gender = user.Gender,
+            ImageUrl = user.ImageUrl
+        };
     }
 
     public async Task ValidateUserRoleAsync(string roleName)
@@ -126,5 +136,11 @@ public class UserService : IUserService
         {
             throw new UnauthorizedException("Insufficient role");
         }
+    }
+
+    private async Task<User> GetUserAsync()
+    {
+        return await _userManager.FindByIdAsync(GetUserId().ToString())
+            ?? throw new UnauthorizedException("Invalid email token");
     }
 }

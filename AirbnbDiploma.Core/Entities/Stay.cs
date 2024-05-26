@@ -47,17 +47,19 @@ public class Stay : IEntity<int>
 
     public float OverallRating { get; set; }
 
-    public byte CleanlinessRating { get; set; }
+    public float CleanlinessRating { get; set; }
 
-    public byte AccuracyRating { get; set; }
+    public float AccuracyRating { get; set; }
 
-    public byte CheckInRating { get; set; }
+    public float CheckInRating { get; set; }
 
-    public byte CommunicationRating { get; set; }
+    public float CommunicationRating { get; set; }
 
-    public byte LocationRating { get; set; }
+    public float LocationRating { get; set; }
 
-    public byte ValueRating { get; set; }
+    public float ValueRating { get; set; }
+
+    public User Owner { get; set; }
 
     public ICollection<Image> ImageUrls { get; set; } = new List<Image>();
 

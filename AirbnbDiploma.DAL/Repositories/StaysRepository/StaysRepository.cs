@@ -17,4 +17,13 @@ public class StaysRepository : RepositoryBase<Stay, int>, IStaysRepository
         var stayFilter = new StayFilter(MainCollection.AsQueryable());
         return await stayFilter.ApplyFilters(filter).ToListAsync();
     }
+
+    public override async Task<Stay> GetByIdAsync(int id)
+    {
+        var entity = await MainCollection
+            .Include(stay => stay.Owner)
+            .FirstOrDefaultAsync(e => e.Id.Equals(id));
+        ThrowIfNull(id, entity);
+        return entity;
+    }
 }

@@ -1,4 +1,6 @@
-﻿namespace AirbnbDiploma.Core.Dto.Stays;
+﻿using AirbnbDiploma.Core.Dto.Users;
+
+namespace AirbnbDiploma.Core.Dto.Stays;
 
 public class StayDto
 {
@@ -23,6 +25,8 @@ public class StayDto
     public int CleaningFee { get; set; }
 
     public RatingDto Rating { get; set; }
+
+    public UserInfoDto Owner { get; set; }
 
     public IEnumerable<string> ImageUrls { get; set; }
 

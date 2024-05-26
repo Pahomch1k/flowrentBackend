@@ -1,4 +1,5 @@
 ﻿using AirbnbDiploma.Core.Dto.Auth;
+using AirbnbDiploma.Core.Dto.Users;
 using AirbnbDiploma.Core.Entities;
 
 namespace AirbnbDiploma.BLL.Services.UserService;
@@ -7,7 +8,7 @@ public interface IUserService
 {
     Guid GetUserId();
 
-    Task<User> GetUserAsync();
+    Task<UserInfoDto> GetUserInfoAsync();
 
     Task ValidateUserRoleAsync(string roleName);
 

@@ -23,7 +23,7 @@ public class BookingService : IBookingService
 
     public async Task BookAsync(BookingRequestDto bookingRequest)
     {
-        var user = await _userService.GetUserAsync();
+        var user = await _userService.GetUserInfoAsync();
         var stay = await _unitOfWork.StaysRepository.GetByIdAsync(bookingRequest.StayId);
         Booking booking = new()
         {

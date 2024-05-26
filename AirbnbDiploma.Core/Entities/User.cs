@@ -15,7 +15,9 @@ public class User : IdentityUser<Guid>
 
     public string? Address { get; set; }
 
-    public DateTime? DateOfBirth { get; set; }
+    public DateTime RegisteredAt { get; set; } = DateTime.UtcNow;
 
-    public GenderType? Gender { get; set; }
+    public DateTime DateOfBirth { get; set; } = DateTime.UtcNow;
+
+    public GenderType Gender { get; set; }
 }

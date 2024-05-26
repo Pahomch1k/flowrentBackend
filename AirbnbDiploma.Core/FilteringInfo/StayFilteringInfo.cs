@@ -22,7 +22,7 @@ public class StayFilteringInfo
 
     public int MinPrice { get; set; }
 
-    public int MaxPrice { get; set; }
+    public int MaxPrice { get; set; } = int.MaxValue;
 
     public short MinBedrooms { get; set; }
 

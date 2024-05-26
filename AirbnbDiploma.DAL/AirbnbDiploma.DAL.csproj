@@ -24,4 +24,8 @@
     <ProjectReference Include="..\AirbnbDiploma.Core\AirbnbDiploma.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

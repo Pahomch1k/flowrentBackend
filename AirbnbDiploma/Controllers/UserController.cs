@@ -1,6 +1,6 @@
 ﻿using AirbnbDiploma.BLL.Services.UserService;
 using AirbnbDiploma.Core.Dto.Auth;
-using AirbnbDiploma.Core.Entities;
+using AirbnbDiploma.Core.Dto.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,9 +19,9 @@ public class UserController : ControllerBase
 
     [Authorize]
     [HttpGet("me")]
-    public async Task<ActionResult<User>> GetAuthorizedUserInfoAsync()
+    public async Task<ActionResult<UserInfoDto>> GetAuthorizedUserInfoAsync()
     {
-        return Ok(await _userService.GetUserAsync());
+        return Ok(await _userService.GetUserInfoAsync());
     }
 
     [Authorize]
