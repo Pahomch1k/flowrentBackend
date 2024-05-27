@@ -25,6 +25,14 @@ public class UserController : ControllerBase
     }
 
     [Authorize]
+    [HttpPost("me")]
+    public async Task<ActionResult<UserInfoDto>> UpdateUserInfoAsync(UpdateUserInfoDto userInfoDto)
+    {
+        await _userService.UpdateUserInfo(userInfoDto);
+        return NoContent();
+    }
+
+    [Authorize]
     [HttpPost("resendEmailConfirmation")]
     public async Task<ActionResult> ResendEmailConfirmation()
     {

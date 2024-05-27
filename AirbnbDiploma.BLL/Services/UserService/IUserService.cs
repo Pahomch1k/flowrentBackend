@@ -23,4 +23,6 @@ public interface IUserService
     Task SendEmailChangeRequestAsync(string newEmail);
 
     Task ConfirmEmailChangeAsync(EmailChangeConfirmationDto emailConfirmation);
+
+    Task UpdateUserInfo(UpdateUserInfoDto userInfo);
 }

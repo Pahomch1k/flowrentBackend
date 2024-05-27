@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using AirbnbDiploma.BLL.Services.EmailService;
+using AirbnbDiploma.BLL.Services.ImageService;
 using AirbnbDiploma.Core.Constants;
 using AirbnbDiploma.Core.Dto.Auth;
 using AirbnbDiploma.Core.Dto.Users;
@@ -17,12 +18,14 @@ public class UserService : IUserService
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly UserManager<User> _userManager;
     private readonly IEmailService _emailService;
+    private readonly IImageService _imageService;
 
-    public UserService(IHttpContextAccessor httpContextAccessor, UserManager<User> userManager, IEmailService emailService)
+    public UserService(IHttpContextAccessor httpContextAccessor, UserManager<User> userManager, IEmailService emailService, IImageService imageService)
     {
         _httpContextAccessor = httpContextAccessor;
         _userManager = userManager;
         _emailService = emailService;
+        _imageService = imageService;
     }
 
     public void ValidateUserId(Guid userId)
@@ -135,6 +138,43 @@ public class UserService : IUserService
         if (!isInRole)
         {
             throw new UnauthorizedException("Insufficient role");
+        }
+    }
+
+    public async Task UpdateUserInfo(UpdateUserInfoDto userInfo)
+    {
+        var user = await GetUserAsync();
+        if (userInfo.Email is not null && user.Email != userInfo.Email)
+        {
+            await SendEmailChangeRequestAsync(userInfo.Email);
+        }
+
+        if (userInfo.ImageBase64 is not null)
+        {
+            await _imageService.SaveImageAsync(user.Id.ToString(), userInfo.ImageBase64);
+            user.ImageUrl = $"http://localhost:5098/api/images/{user.Id}";
+        }
+
+        if (userInfo.DateOfBirth is not null)
+        {
+            user.DateOfBirth = userInfo.DateOfBirth.Value;
+        }
+
+        if (userInfo.Gender is not null)
+        {
+            user.Gender = userInfo.Gender.Value;
+        }
+
+        await _userManager.UpdateAsync(user);
+
+        if (userInfo.UserName is not null)
+        {
+            await _userManager.SetUserNameAsync(user, userInfo.UserName);
+        }
+
+        if (userInfo.CurrentPassword is not null && userInfo.NewPassword is not null && userInfo.CurrentPassword != userInfo.NewPassword)
+        {
+            await _userManager.ChangePasswordAsync(user, userInfo.CurrentPassword, userInfo.NewPassword);
         }
     }
 
