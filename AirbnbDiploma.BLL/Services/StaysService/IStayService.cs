@@ -9,6 +9,8 @@ public interface IStayService
 
     Task<IEnumerable<StayBriefDto>> GetStaysAsync(StayFilteringInfo filteringInfo);
 
+    Task<IEnumerable<StayBriefDto>> GetStaysOfAuthorizedUser();
+
     Task<StayDto> GetStayAsync(int id);
 
     Task RemoveStayByIdAsync(int id);

@@ -13,6 +13,8 @@ public class Stay : IEntity<int>
 
     public string Title { get; set; }
 
+    public StayStatus Status { get; set; } = StayStatus.Upcoming;
+
     public PlaceType PlaceType { get; set; }
 
     public PropertyType PropertyType { get; set; }

@@ -18,6 +18,11 @@ public class StaysRepository : RepositoryBase<Stay, int>, IStaysRepository
         return await stayFilter.ApplyFilters(filter).ToListAsync();
     }
 
+    public async Task<IEnumerable<Stay>> GetAllByOwnerId(Guid id)
+    {
+        return await MainCollection.Where(stay => stay.OwnerId == id).ToListAsync();
+    }
+
     public override async Task<Stay> GetByIdAsync(int id)
     {
         var entity = await MainCollection

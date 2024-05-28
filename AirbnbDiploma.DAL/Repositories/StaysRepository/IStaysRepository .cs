@@ -7,4 +7,6 @@ namespace AirbnbDiploma.DAL.Repositories.StaysRepository;
 public interface IStaysRepository : IRepository<Stay, int>
 {
     Task<IEnumerable<Stay>> GetAllFilteredAsync(StayFilteringInfo filter);
+
+    Task<IEnumerable<Stay>> GetAllByOwnerId(Guid id);
 }

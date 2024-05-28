@@ -39,6 +39,13 @@ public class StaysController : ControllerBase
         return Ok(await _stayService.GetStayAsync(id));
     }
 
+    [Authorize]
+    [HttpGet("my")]
+    public async Task<ActionResult<IEnumerable<StayBriefDto>>> GetAsyncOfAuthorizedUser()
+    {
+        return Ok(await _stayService.GetStaysOfAuthorizedUser());
+    }
+
     [HttpDelete]
     [Route("{id}")]
     [Authorize(Roles = Roles.User)]

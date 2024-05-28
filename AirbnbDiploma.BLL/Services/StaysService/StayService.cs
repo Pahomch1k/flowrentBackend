@@ -20,12 +20,14 @@ public class StayService : IStayService
 
     public async Task AddStayAsync(NewStayDto stayDto)
     {
+        var usedId = _userService.GetUserId();
         var stay = new Stay
         {
             Title = stayDto.Title,
             Description = stayDto.Description,
             CoverImageUrl = stayDto.CoverImageUrl,
             Location = stayDto.Location,
+            OwnerId = usedId,
             StartDate = stayDto.StartDate,
             EndDate = stayDto.EndDate,
             MaxGuests = stayDto.MaxGuests,
@@ -94,17 +96,14 @@ public class StayService : IStayService
     public async Task<IEnumerable<StayBriefDto>> GetStaysAsync(StayFilteringInfo filteringInfo)
     {
         var stays = await _unitOfWork.StaysRepository.GetAllFilteredAsync(filteringInfo);
-        return stays.Select((stay) => new StayBriefDto
-        {
-            Id = stay.Id,
-            ImageUrl = stay.CoverImageUrl,
-            Name = stay.Title,
-            Place = stay.Location,
-            StartDate = stay.StartDate,
-            EndDate = stay.EndDate,
-            Rating = stay.OverallRating,
-            Price = stay.Price,
-        });
+        return stays.Select((stay) => MapStay(stay));
+    }
+
+    public async Task<IEnumerable<StayBriefDto>> GetStaysOfAuthorizedUser()
+    {
+        var userId = _userService.GetUserId();
+        var stays = await _unitOfWork.StaysRepository.GetAllByOwnerId(userId);
+        return stays.Select((stay) => MapStay(stay));
     }
 
     public async Task RemoveStayByIdAsync(int id)
@@ -113,5 +112,21 @@ public class StayService : IStayService
         _userService.ValidateUserId(stay.OwnerId);
         await _unitOfWork.StaysRepository.DeleteAsync(id);
         await _unitOfWork.CommitAsync();
+    }
+
+    private static StayBriefDto MapStay(Stay stay)
+    {
+        return new StayBriefDto
+        {
+            Id = stay.Id,
+            ImageUrl = stay.CoverImageUrl,
+            Name = stay.Title,
+            Place = stay.Location,
+            Status = stay.Status,
+            StartDate = stay.StartDate,
+            EndDate = stay.EndDate,
+            Rating = stay.OverallRating,
+            Price = stay.Price,
+        };
     }
 }

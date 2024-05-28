@@ -1,4 +1,6 @@
-﻿namespace AirbnbDiploma.Core.Dto.Stays;
+﻿using AirbnbDiploma.Core.Enums;
+
+namespace AirbnbDiploma.Core.Dto.Stays;
 
 public class StayBriefDto
 {
@@ -9,6 +11,8 @@ public class StayBriefDto
     public string Name { get; set; }
 
     public string Place { get; set; }
+
+    public StayStatus Status { get; set; }
 
     public DateTime StartDate { get; set; }
 
