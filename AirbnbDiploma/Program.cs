@@ -35,7 +35,7 @@ public static class Program
             options.AddDefaultPolicy(
                 policy =>
                 {
-                    policy.WithOrigins("http://localhost:4200");
+                    policy.WithOrigins("http://localhost:4200", "http://flowrent.sytes.net");
                     policy.AllowAnyMethod();
                     policy.AllowAnyHeader();
                     policy.AllowCredentials();
