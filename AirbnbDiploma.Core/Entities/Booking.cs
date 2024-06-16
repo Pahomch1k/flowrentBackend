@@ -15,7 +15,13 @@ public class Booking : IEntity<int>
 
     public DateTime CheckOutDate { get; set; }
 
+    public DateTime BookedDate { get; set; } = DateTime.UtcNow;
+
     public int Guests { get; set; }
 
     public BookingStatus Status { get; set; }
+
+    public Stay Stay { get; set; }
+
+    public User User { get; set; }
 }

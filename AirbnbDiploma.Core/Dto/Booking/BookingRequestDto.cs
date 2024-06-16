@@ -3,6 +3,7 @@
 public class BookingRequestDto
 {
     public Guid StayId { get; set; }
+
     public DateTime CheckInDate { get; set; }
 
     public DateTime CheckOutDate { get; set; }

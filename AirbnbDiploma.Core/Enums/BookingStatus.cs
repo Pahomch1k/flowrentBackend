@@ -3,4 +3,7 @@
 public enum BookingStatus
 {
     AwaitingPayment,
+    Upcoming,
+    Completed,
+    Cancelled,
 }

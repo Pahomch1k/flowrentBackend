@@ -48,4 +48,22 @@ public class BookingService : IBookingService
         };
         await _emailService.SendAsync(user.Email, "Flowrent successful booking", HtmlTemplateNames.BookingSuccessful, arguments);
     }
+
+    public async Task<IEnumerable<BookingDto>> GetMyStaysBookingsAsync()
+    {
+        var userId = _userService.GetUserId();
+        var bookings = await _unitOfWork.BookingRepository.GetAllByUserIdAsync(userId);
+        return bookings.Select(booking => new BookingDto
+        {
+            BookedDate = booking.BookedDate,
+            StayLocation = booking.Stay.Location,
+            CheckInDate = booking.CheckInDate,
+            CheckOutDate = booking.CheckOutDate,
+            Price = booking.Stay.Price,
+            Status = booking.Status,
+            StayName = booking.Stay.Title,
+            UserImageUrl = booking.User.ImageUrl,
+            UserName = booking.User.UserName,
+        }).ToList();
+    }
 }

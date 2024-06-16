@@ -1,5 +1,6 @@
 ﻿using AirbnbDiploma.BLL.Services.BookingService;
 using AirbnbDiploma.Core.Dto.Booking;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AirbnbDiploma.Controllers;
@@ -20,5 +21,13 @@ public class BookingController : ControllerBase
     {
         await _bookingService.BookAsync(bookingRequest);
         return Created("", null);
+    }
+
+    [Authorize]
+    [HttpGet("my")]
+    public async Task<ActionResult<IEnumerable<BookingDto>>> GetBookingsOfMyStays()
+    {
+        var bookings = await _bookingService.GetMyStaysBookingsAsync();
+        return Ok(bookings);
     }
 }
