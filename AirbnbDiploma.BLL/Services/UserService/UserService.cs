@@ -50,7 +50,7 @@ public class UserService : IUserService
         var newEmailBase64 = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(newEmail));
         var emalArguments = new EmailChangeArguments
         {
-            Link = $"https://{_httpContextAccessor.HttpContext.Request.Host}/api/user/confirmEmailChange?id={user.Id}&newEmail={newEmailBase64}&token={tokenBase64}",
+            Link = $"http://{_httpContextAccessor.HttpContext.Request.Host}/api/user/confirmEmailChange?id={user.Id}&newEmail={newEmailBase64}&token={tokenBase64}",
             NewEmail = newEmail,
         };
         await _emailService.SendAsync(user.Email, "Email change", HtmlTemplateNames.EmailChange, emalArguments);
@@ -91,7 +91,7 @@ public class UserService : IUserService
         var tokenBase64 = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(token));
         var emalArguments = new EmailConfirmationArguments
         {
-            Link = $"https://{_httpContextAccessor.HttpContext.Request.Host}/api/user/confirmEmail?id={user.Id}&token={tokenBase64}"
+            Link = $"http://{_httpContextAccessor.HttpContext.Request.Host}/api/user/confirmEmail?id={user.Id}&token={tokenBase64}"
         };
         await _emailService.SendAsync(user.Email, "Email confirmation", HtmlTemplateNames.EmailConfimation, emalArguments);
     }
@@ -152,7 +152,7 @@ public class UserService : IUserService
         if (userInfo.ImageBase64 is not null)
         {
             await _imageService.SaveImageAsync(user.Id.ToString(), userInfo.ImageBase64);
-            user.ImageUrl = $"http://localhost:5098/api/images/{user.Id}";
+            user.ImageUrl = $"http://{_httpContextAccessor.HttpContext.Request.Host}/api/images/{user.Id}";
         }
 
         if (userInfo.DateOfBirth is not null)

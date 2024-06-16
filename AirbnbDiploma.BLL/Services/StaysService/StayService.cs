@@ -1,10 +1,12 @@
-﻿using AirbnbDiploma.BLL.Services.UserService;
+﻿using AirbnbDiploma.BLL.Services.ImageService;
+using AirbnbDiploma.BLL.Services.UserService;
 using AirbnbDiploma.Core.Dto.Stays;
 using AirbnbDiploma.Core.Dto.Users;
 using AirbnbDiploma.Core.Entities;
 using AirbnbDiploma.Core.Enums;
 using AirbnbDiploma.Core.FilteringInfo;
 using AirbnbDiploma.DAL.UnitOfWork;
+using Microsoft.AspNetCore.Http;
 
 namespace AirbnbDiploma.BLL.Services.StaysService;
 
@@ -12,11 +14,15 @@ public class StayService : IStayService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserService _userService;
+    private readonly IImageService _imageService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public StayService(IUnitOfWork unitOfWork, IUserService userService)
+    public StayService(IUnitOfWork unitOfWork, IUserService userService, IImageService imageService, IHttpContextAccessor httpContextAccessor)
     {
         _unitOfWork = unitOfWork;
         _userService = userService;
+        _imageService = imageService;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task AddStayAsync(NewStayDto stayDto)
@@ -28,12 +34,25 @@ public class StayService : IStayService
         tags.AddRange(MapTags(stayDto.Offers, id, TagCategory.Offers));
         tags.AddRange(MapTags(stayDto.Places, id, TagCategory.Amenities));
         tags.AddRange(MapTags(stayDto.Safetys, id, TagCategory.Safetys));
+
+        List<Image> images = new(stayDto.Images.Count());
+        foreach (var image in stayDto.Images)
+        {
+            var imageId = Guid.NewGuid();
+            await _imageService.SaveImageAsync(imageId.ToString(), image);
+            images.Add(new Image
+            {
+                Id = imageId,
+                Url = $"http://{_httpContextAccessor.HttpContext.Request.Host}/api/images/{imageId}"
+            });
+        }
+
         var stay = new Stay
         {
             Id = id,
             Title = stayDto.Title,
             Description = stayDto.Description,
-            CoverImageUrl = stayDto.Images.FirstOrDefault(),
+            CoverImageUrl = images.FirstOrDefault()?.Url,
             Location = stayDto.Location,
             OwnerId = usedId,
             StartDate = stayDto.StartDate,
@@ -49,6 +68,7 @@ public class StayService : IStayService
             LocationRating = 0,
             ValueRating = 0,
             Tags = tags,
+            ImageUrls = images,
         };
         await _unitOfWork.StaysRepository.AddAsync(stay);
         await _unitOfWork.CommitAsync();

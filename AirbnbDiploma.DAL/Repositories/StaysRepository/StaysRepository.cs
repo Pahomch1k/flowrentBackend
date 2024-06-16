@@ -28,6 +28,7 @@ public class StaysRepository : RepositoryBase<Stay, Guid>, IStaysRepository
         var entity = await MainCollection
             .Include(stay => stay.Owner)
             .Include(stay => stay.Tags)
+            .Include(stay => stay.ImageUrls)
             .FirstOrDefaultAsync(e => e.Id.Equals(id));
         ThrowIfNull(id, entity);
         return entity;
