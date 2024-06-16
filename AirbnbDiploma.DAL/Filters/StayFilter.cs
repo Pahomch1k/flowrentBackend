@@ -15,6 +15,7 @@ internal class StayFilter
     public IQueryable<Stay> ApplyFilters(StayFilteringInfo filteringInfo)
     {
         ApplyPlaceTypeFilters(filteringInfo);
+        ApplyPlaceFilters(filteringInfo);
         ApplyRegionFilters(filteringInfo);
         ApplyDateFilters(filteringInfo);
         ApplyGuestFilters(filteringInfo);
@@ -47,6 +48,15 @@ internal class StayFilter
         }
     }
 
+    private void ApplyPlaceFilters(StayFilteringInfo filteringInfo)
+    {
+        if (filteringInfo.Places is not null)
+        {
+            _queryable = _queryable
+                .Where(stay => stay.Tags.Count(place => place.Category == TagCategory.Places && filteringInfo.Places.Contains(place.Type)) == filteringInfo.Places.Count());
+        }
+    }
+
     private void ApplyRegionFilters(StayFilteringInfo filteringInfo)
     {
         if (filteringInfo.RegionId is not null)
@@ -59,12 +69,12 @@ internal class StayFilter
     {
         if (filteringInfo.CheckInDate is not null)
         {
-            _queryable = _queryable.Where(g => g.StartDate >= filteringInfo.CheckoutDate);
+            _queryable = _queryable.Where(g => g.StartDate <= filteringInfo.CheckoutDate);
         }
 
         if (filteringInfo.CheckoutDate is not null)
         {
-            _queryable = _queryable.Where(g => g.EndDate <= filteringInfo.CheckoutDate);
+            _queryable = _queryable.Where(g => g.EndDate >= filteringInfo.CheckoutDate);
         }
     }
 

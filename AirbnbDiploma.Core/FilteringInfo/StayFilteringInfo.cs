@@ -40,6 +40,8 @@ public class StayFilteringInfo
 
     public IEnumerable<PropertyType>? PropertyTypes { get; set; }
 
+    public IEnumerable<int>? Places { get; set; }
+
     public IEnumerable<int>? Amenities { get; set; }
 
     public IEnumerable<int>? AccessibilityFeatures { get; set; }
