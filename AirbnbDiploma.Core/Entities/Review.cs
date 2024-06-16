@@ -8,7 +8,7 @@ public class Review : IEntity<int>
 
     public Guid AuthorId { get; set; }
 
-    public int StayId { get; set; }
+    public Guid StayId { get; set; }
 
     public byte Rating { get; set; }
 

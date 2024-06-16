@@ -10,7 +10,7 @@ public class ReviewRepository : RepositoryBase<Review, int>, IReviewRepository
     {
     }
 
-    public async Task<IEnumerable<Review>> GetAllByStayIdAsync(int stayId, int skip, int count)
+    public async Task<IEnumerable<Review>> GetAllByStayIdAsync(Guid stayId, int skip, int count)
     {
         return await Context.Reviews.Where(review => review.StayId == stayId).Skip(skip).Take(count).ToListAsync();
     }

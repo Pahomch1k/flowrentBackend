@@ -22,7 +22,7 @@ public class StayConfiguration : IEntityTypeConfiguration<Stay>
         builder.HasData(
             new Stay
             {
-                Id = 1,
+                Id = Guid.Parse("ff6effab-0f3d-4a2a-b7c3-9ea770f75bd3"),
                 OwnerId = Guid.Parse("46e7ba0c-d5ca-4f12-abe8-cb6de810f922"),
                 Title = "Cozy Mountain Cabin",
                 Description = "A cozy cabin in the mountains with stunning views.",
@@ -40,7 +40,7 @@ public class StayConfiguration : IEntityTypeConfiguration<Stay>
                 InstantBook = true,
                 SelfCheckIn = true,
                 PropertyType = PropertyType.Any,
-                PlaceType = PlaceType.Any,
+                PlaceType = PlaceType.EntirePlace,
                 OverallRating = 4.8f,
                 CleanlinessRating = 4.9f,
                 AccuracyRating = 4.7f,
@@ -51,7 +51,7 @@ public class StayConfiguration : IEntityTypeConfiguration<Stay>
             },
             new Stay
             {
-                Id = 2,
+                Id = Guid.Parse("ebc8b6d9-af0d-45a8-bf11-9c6608116ba7"),
                 OwnerId = Guid.Parse("46e7ba0c-d5ca-4f12-abe8-cb6de810f922"),
                 Title = "Beachfront Bungalow",
                 Description = "A beautiful bungalow right on the beach.",
@@ -69,7 +69,7 @@ public class StayConfiguration : IEntityTypeConfiguration<Stay>
                 InstantBook = false,
                 SelfCheckIn = false,
                 PropertyType = PropertyType.Any,
-                PlaceType = PlaceType.Any,
+                PlaceType = PlaceType.EntirePlace,
                 OverallRating = 4.9f,
                 CleanlinessRating = 5.0f,
                 AccuracyRating = 4.8f,
@@ -80,7 +80,7 @@ public class StayConfiguration : IEntityTypeConfiguration<Stay>
             },
             new Stay
             {
-                Id = 3,
+                Id = Guid.Parse("5055883b-7c4f-41a3-9709-fe7aed818124"),
                 OwnerId = Guid.Parse("46e7ba0c-d5ca-4f12-abe8-cb6de810f922"),
                 Title = "Modern City Apartment",
                 Description = "A sleek apartment in the heart of downtown.",
@@ -98,7 +98,7 @@ public class StayConfiguration : IEntityTypeConfiguration<Stay>
                 InstantBook = true,
                 SelfCheckIn = true,
                 PropertyType = PropertyType.Any,
-                PlaceType = PlaceType.Any,
+                PlaceType = PlaceType.EntirePlace,
                 OverallRating = 4.7f,
                 CleanlinessRating = 4.8f,
                 AccuracyRating = 4.6f,
@@ -109,7 +109,7 @@ public class StayConfiguration : IEntityTypeConfiguration<Stay>
             },
             new Stay
             {
-                Id = 4,
+                Id = Guid.Parse("4624dc54-c728-436d-a907-7b357b6649e2"),
                 OwnerId = Guid.Parse("46e7ba0c-d5ca-4f12-abe8-cb6de810f922"),
                 Title = "Rustic Farmhouse",
                 Description = "Experience life on a farm with modern amenities.",
@@ -127,7 +127,7 @@ public class StayConfiguration : IEntityTypeConfiguration<Stay>
                 InstantBook = false,
                 SelfCheckIn = true,
                 PropertyType = PropertyType.Any,
-                PlaceType = PlaceType.Any,
+                PlaceType = PlaceType.EntirePlace,
                 OverallRating = 4.6f,
                 CleanlinessRating = 4.7f,
                 AccuracyRating = 4.5f,
@@ -138,7 +138,7 @@ public class StayConfiguration : IEntityTypeConfiguration<Stay>
             },
             new Stay
             {
-                Id = 5,
+                Id = Guid.Parse("0b30dfe1-46a5-4be9-9192-00831a78404e"),
                 OwnerId = Guid.Parse("46e7ba0c-d5ca-4f12-abe8-cb6de810f922"),
                 Title = "Luxury Villa",
                 Description = "A stunning villa with a private pool and ocean views.",
@@ -156,7 +156,7 @@ public class StayConfiguration : IEntityTypeConfiguration<Stay>
                 InstantBook = true,
                 SelfCheckIn = false,
                 PropertyType = PropertyType.Any,
-                PlaceType = PlaceType.Any,
+                PlaceType = PlaceType.EntirePlace,
                 OverallRating = 4.9f,
                 CleanlinessRating = 5.0f,
                 AccuracyRating = 4.9f,

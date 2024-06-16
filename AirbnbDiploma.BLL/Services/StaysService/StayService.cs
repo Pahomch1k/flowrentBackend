@@ -2,6 +2,7 @@
 using AirbnbDiploma.Core.Dto.Stays;
 using AirbnbDiploma.Core.Dto.Users;
 using AirbnbDiploma.Core.Entities;
+using AirbnbDiploma.Core.Enums;
 using AirbnbDiploma.Core.FilteringInfo;
 using AirbnbDiploma.DAL.UnitOfWork;
 
@@ -21,18 +22,25 @@ public class StayService : IStayService
     public async Task AddStayAsync(NewStayDto stayDto)
     {
         var usedId = _userService.GetUserId();
+        List<Tag> tags = new();
+        var id = Guid.NewGuid();
+        tags.AddRange(MapTags(stayDto.Places, id, TagCategory.Places));
+        tags.AddRange(MapTags(stayDto.Offers, id, TagCategory.Offers));
+        tags.AddRange(MapTags(stayDto.Places, id, TagCategory.Amenities));
+        tags.AddRange(MapTags(stayDto.Safetys, id, TagCategory.Safetys));
         var stay = new Stay
         {
+            Id = id,
             Title = stayDto.Title,
             Description = stayDto.Description,
-            CoverImageUrl = stayDto.CoverImageUrl,
+            CoverImageUrl = stayDto.Images.FirstOrDefault(),
             Location = stayDto.Location,
             OwnerId = usedId,
             StartDate = stayDto.StartDate,
             EndDate = stayDto.EndDate,
             MaxGuests = stayDto.MaxGuests,
             Price = stayDto.Price,
-            CleaningFee = stayDto.CleaningFee,
+            CleaningFee = 0,
             OverallRating = 0,
             CleanlinessRating = 0,
             AccuracyRating = 0,
@@ -40,12 +48,13 @@ public class StayService : IStayService
             CommunicationRating = 0,
             LocationRating = 0,
             ValueRating = 0,
+            Tags = tags,
         };
         await _unitOfWork.StaysRepository.AddAsync(stay);
         await _unitOfWork.CommitAsync();
     }
 
-    public async Task<StayDto> GetStayAsync(int id)
+    public async Task<StayDto> GetStayAsync(Guid id)
     {
         var stay = await _unitOfWork.StaysRepository.GetByIdAsync(id);
         return new StayDto
@@ -81,15 +90,10 @@ public class StayService : IStayService
                 YearsOfHosting = (int)((DateTime.UtcNow - stay.Owner.RegisteredAt).TotalDays / 365.2425)
             },
             ImageUrls = stay.ImageUrls.Select((image) => image.Url),
-            Amenities = stay.Amenities.GroupBy((amenity) => amenity.TagTypeId).Select((amenityGroup) => new TagTypeDto
-            {
-                Name = amenityGroup.First().Name,
-                Tags = amenityGroup.Select((amenityGroupElement) => new TagDto
-                {
-                    Name = amenityGroupElement.Name,
-                    Category = amenityGroupElement.Category,
-                })
-            }),
+            Amenities = stay.Tags.Where(tag => tag.Category == TagCategory.Amenities).Select(tag => tag.Type),
+            Places = stay.Tags.Where(tag => tag.Category == TagCategory.Places).Select(tag => tag.Type),
+            Offers = stay.Tags.Where(tag => tag.Category == TagCategory.Offers).Select(tag => tag.Type),
+            Safetys = stay.Tags.Where(tag => tag.Category == TagCategory.Safetys).Select(tag => tag.Type)
         };
     }
 
@@ -106,12 +110,22 @@ public class StayService : IStayService
         return stays.Select((stay) => MapStay(stay));
     }
 
-    public async Task RemoveStayByIdAsync(int id)
+    public async Task RemoveStayByIdAsync(Guid id)
     {
         var stay = await _unitOfWork.StaysRepository.GetByIdAsync(id);
         _userService.ValidateUserId(stay.OwnerId);
         await _unitOfWork.StaysRepository.DeleteAsync(id);
         await _unitOfWork.CommitAsync();
+    }
+
+    private static IEnumerable<Tag> MapTags(IEnumerable<int> tags, Guid stayId, TagCategory category)
+    {
+        return tags.Select(tag => new Tag
+        {
+            StayId = stayId,
+            Category = category,
+            Type = tag
+        });
     }
 
     private static StayBriefDto MapStay(Stay stay)

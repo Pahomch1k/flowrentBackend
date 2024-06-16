@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AirbnbDiploma.DAL.Repositories.StaysRepository;
 
-public class StaysRepository : RepositoryBase<Stay, int>, IStaysRepository
+public class StaysRepository : RepositoryBase<Stay, Guid>, IStaysRepository
 {
     public StaysRepository(AppDbContext context) : base(context)
     {
@@ -23,10 +23,11 @@ public class StaysRepository : RepositoryBase<Stay, int>, IStaysRepository
         return await MainCollection.Where(stay => stay.OwnerId == id).ToListAsync();
     }
 
-    public override async Task<Stay> GetByIdAsync(int id)
+    public override async Task<Stay> GetByIdAsync(Guid id)
     {
         var entity = await MainCollection
             .Include(stay => stay.Owner)
+            .Include(stay => stay.Tags)
             .FirstOrDefaultAsync(e => e.Id.Equals(id));
         ThrowIfNull(id, entity);
         return entity;

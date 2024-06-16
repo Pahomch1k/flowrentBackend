@@ -2,4 +2,8 @@
 
 public enum TagCategory
 {
+    Places,
+    Offers,
+    Amenities,
+    Safetys
 }

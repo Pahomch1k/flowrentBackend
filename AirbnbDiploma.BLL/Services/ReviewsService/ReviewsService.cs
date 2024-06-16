@@ -30,7 +30,7 @@ public class ReviewsService : IReviewsService
         await _unitOfWork.CommitAsync();
     }
 
-    public async Task<IEnumerable<ReviewDto>> GetReviewsByStayIdAsync(int stayId, int skip, int count)
+    public async Task<IEnumerable<ReviewDto>> GetReviewsByStayIdAsync(Guid stayId, int skip, int count)
     {
         var reviews = await _unitOfWork.ReviewRepository.GetAllByStayIdAsync(stayId, skip, count);
         return reviews.Select((review) => new ReviewDto

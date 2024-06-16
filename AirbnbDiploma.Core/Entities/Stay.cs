@@ -3,9 +3,9 @@ using AirbnbDiploma.Core.Enums;
 
 namespace AirbnbDiploma.Core.Entities;
 
-public class Stay : IEntity<int>
+public class Stay : IEntity<Guid>
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     public Guid OwnerId { get; set; }
 
@@ -21,7 +21,7 @@ public class Stay : IEntity<int>
 
     public string Description { get; set; }
 
-    public string CoverImageUrl { get; set; }
+    public string? CoverImageUrl { get; set; }
 
     public string Location { get; set; }
 
@@ -65,7 +65,7 @@ public class Stay : IEntity<int>
 
     public ICollection<Image> ImageUrls { get; set; } = new List<Image>();
 
-    public ICollection<Tag> Amenities { get; set; } = new List<Tag>();
+    public ICollection<Tag> Tags { get; set; } = new List<Tag>();
 
     public ICollection<Review> Reviews { get; set; } = new List<Review>();
 }

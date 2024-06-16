@@ -34,7 +34,7 @@ public class StaysController : ControllerBase
 
     [HttpGet]
     [Route("{id}")]
-    public async Task<ActionResult<StayDto>> GetAsync(int id)
+    public async Task<ActionResult<StayDto>> GetAsync(Guid id)
     {
         return Ok(await _stayService.GetStayAsync(id));
     }
@@ -49,7 +49,7 @@ public class StaysController : ControllerBase
     [HttpDelete]
     [Route("{id}")]
     [Authorize(Roles = Roles.User)]
-    public async Task<ActionResult> RemoveAsync(int id)
+    public async Task<ActionResult> RemoveAsync(Guid id)
     {
         await _stayService.RemoveStayByIdAsync(id);
         return NoContent();

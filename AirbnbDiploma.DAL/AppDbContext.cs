@@ -20,8 +20,6 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>
 
     public DbSet<Tag> Tags { get; set; }
 
-    public DbSet<TagType> TagTypes { get; set; }
-
     public DbSet<WhishlistCategory> WhishlistCategories { get; set; }
 
     public DbSet<WhishlistItem> WhishlistItems { get; set; }

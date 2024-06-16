@@ -4,9 +4,9 @@ namespace AirbnbDiploma.Core.Dto.Stays;
 
 public class StayBriefDto
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
-    public string ImageUrl { get; set; }
+    public string? ImageUrl { get; set; }
 
     public string Name { get; set; }
 

@@ -4,7 +4,7 @@ namespace AirbnbDiploma.Core.Dto.Stays;
 
 public class StayDto
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     public string Title { get; set; }
 
@@ -30,5 +30,11 @@ public class StayDto
 
     public IEnumerable<string> ImageUrls { get; set; }
 
-    public IEnumerable<TagTypeDto> Amenities { get; set; }
+    public IEnumerable<int> Amenities { get; set; }
+
+    public IEnumerable<int> Places { get; set; }
+
+    public IEnumerable<int> Offers { get; set; }
+
+    public IEnumerable<int> Safetys { get; set; }
 }

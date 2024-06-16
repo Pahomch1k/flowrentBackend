@@ -2,11 +2,10 @@
 
 public class BookingRequestDto
 {
-    public int StayId { get; set; }
+    public Guid StayId { get; set; }
     public DateTime CheckInDate { get; set; }
 
     public DateTime CheckOutDate { get; set; }
 
     public int Guests { get; set; }
-
 }

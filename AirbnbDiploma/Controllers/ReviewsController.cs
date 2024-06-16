@@ -27,7 +27,7 @@ public class ReviewsController : ControllerBase
 
     [HttpGet]
     [Route("/Stays/{id}/reviews")]
-    public async Task<ActionResult<IEnumerable<ReviewDto>>> GetAsync(int id, int skip = 0, int count = int.MaxValue)
+    public async Task<ActionResult<IEnumerable<ReviewDto>>> GetAsync(Guid id, int skip = 0, int count = int.MaxValue)
     {
         return Ok(await _reviewsService.GetReviewsByStayIdAsync(id, skip, count));
     }

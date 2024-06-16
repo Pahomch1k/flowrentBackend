@@ -3,6 +3,7 @@
 public enum PlaceType
 {
     Any,
+    EntirePlace,
     Room,
-    EntireHome
+    SharedRoom
 }

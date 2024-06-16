@@ -4,7 +4,7 @@ using AirbnbDiploma.DAL.Repositories.Base;
 
 namespace AirbnbDiploma.DAL.Repositories.StaysRepository;
 
-public interface IStaysRepository : IRepository<Stay, int>
+public interface IStaysRepository : IRepository<Stay, Guid>
 {
     Task<IEnumerable<Stay>> GetAllFilteredAsync(StayFilteringInfo filter);
 
