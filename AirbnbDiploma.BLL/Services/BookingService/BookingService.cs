@@ -46,6 +46,6 @@ public class BookingService : IBookingService
             EndDate = booking.CheckOutDate.ToString(),
             Cost = ((booking.CheckOutDate - booking.CheckInDate).Days * stay.Price).ToString(),
         };
-        await _emailService.SendAsync(user.Email, "Airbnb successful booking", HtmlTemplateNames.BookingSuccessful, arguments);
+        await _emailService.SendAsync(user.Email, "Flowrent successful booking", HtmlTemplateNames.BookingSuccessful, arguments);
     }
 }
