@@ -15,6 +15,7 @@ using AirbnbDiploma.BLL.Services.EmailService;
 using AirbnbDiploma.BLL.Services.WhishlistService;
 using AirbnbDiploma.BLL.Services.BookingService;
 using AirbnbDiploma.BLL.Services.ImageService;
+using Prometheus;
 
 namespace AirbnbDiploma;
 
@@ -84,12 +85,15 @@ public static class Program
 
         app.UseCors();
 
+        app.UseHttpMetrics();
+
         app.UseAuthentication();
         app.UseAuthorization();
 
         app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
         app.MapControllers();
+        app.MapMetrics();
 
         app.Run();
     }
